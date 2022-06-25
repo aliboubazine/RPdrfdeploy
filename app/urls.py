@@ -7,7 +7,7 @@ from knox import views as knox_views
 from .views import RegisterAPI
 from .views import LoginAPI
 from .views import DeleteAPI
-from .views import ArticleApi
+from app import views
 
 
 
@@ -17,8 +17,6 @@ urlpatterns = [
     path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
     path('api/delete/', DeleteAPI.as_view(), name='delete'),
-    path('api/article/', ArticleApi.as_view(), name='article'),
-    path('api/article/([0-9]+)', ArticleApi.as_view(), name='deletearticle'),
-#    re_path(r'^article$',views.ArticleApi),
-#    re_path(r'^article/([0-9]+)$',views.ArticleApi),
+    re_path(r'^article$',views.ArticleApi),
+    re_path(r'^article/([0-9]+)$',views.ArticleApi),
 ]
