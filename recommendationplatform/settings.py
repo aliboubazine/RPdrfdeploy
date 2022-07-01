@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$a2etz#+3ljb=-3-7zm%yz&r!r5_o#d#pfr9pc70bn%a02(ei('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','recommendationplatformdrf.herokuapp.com']
+#ALLOWED_HOSTS = ['localhost','recommendationplatformdrf.herokuapp.com']
 
 
 # Application definition
@@ -101,10 +101,10 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mytestdb',
-        'USER': 'root',
-        'PASSWORD': 'aliali99',
-        'HOST': 'localhost',
+        'NAME': 'sql11503168',
+        'USER': 'sql11503168',
+        'PASSWORD': 'Bv7fqJWR6F',
+        'HOST': 'sql11.freemysqlhosting.net',
         'PORT': '3306',
     }
 }
