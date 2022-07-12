@@ -1,7 +1,9 @@
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.utils import timezone
+
 
 
 class UserManager(BaseUserManager):
@@ -42,10 +44,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
+  
 
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     resume = models.CharField(max_length=500)
-    auteurs = models.CharField(max_length=200)
-    date_posted = models.DateField() 
+    date_posted = models.DateField()
+
+    def __str__(self):
+        return self.title
+
+ 

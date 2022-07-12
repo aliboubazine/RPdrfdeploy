@@ -60,6 +60,9 @@ REST_FRAMEWORK = {
 #       'rest_framework.authentication.SessionAuthentication',
 #       'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
 #   'DEFAULT_PERMISSION_CLASSES': (
 #       'rest_framework.permissions.IsAdminUser',
 #   ),
@@ -101,9 +104,9 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sql11503168',
-        'USER': 'sql11503168',
-        'PASSWORD': 'Bv7fqJWR6F',
+        'NAME': 'sql11505993',
+        'USER': 'sql11505993',
+        'PASSWORD': 'rfhugFptip',
         'HOST': 'sql11.freemysqlhosting.net',
         'PORT': '3306',
     }

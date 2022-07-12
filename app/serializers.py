@@ -62,7 +62,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 # Article Serializer
-class ArticleSerializer(ModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
     class Meta :
         model = Article
-        fields = '__all__'        
+        fields = '__all__'

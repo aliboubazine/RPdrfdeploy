@@ -8,7 +8,7 @@ from .views import RegisterAPI
 from .views import LoginAPI
 from .views import DeleteAPI
 from app import views
-
+from rest_framework import routers
 
 
 urlpatterns = [
@@ -16,7 +16,10 @@ urlpatterns = [
     path('api/login/', LoginAPI.as_view(), name='login'),
     path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
-    path('api/delete/', DeleteAPI.as_view(), name='delete'),
-    re_path(r'^article$',views.ArticleApi),
-    re_path(r'^article/([0-9]+)$',views.ArticleApi),
+    path('api/users/',views.UsersApi,name='userlist'),
+    path('api/article/',views.ArticleApi,name='articleslist'),
+    re_path(r'^article/([0-9]+)$',views.ArticleById,name='articledetail'),
+    re_path(r'^article/delete/([0-9]+)$',views.ArticleApi),
+    re_path(r'^user/([0-9]+)$',views.UserById,name='userdetail'),
+    re_path(r'^user/auteur/([0-9]+)$',views.UserToAuteur,name='usertoauteur')
 ]
