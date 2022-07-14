@@ -112,8 +112,8 @@ def UserToAuteur(request,id=0):
     if request.method=='PUT':
         user = User.objects.get(U_Id=id)
         setattr(user,'is_superuser',True)
+        user.save()
         user_serializer=UserSerializer(user)
-        user_serializer.save()
         return Response(user_serializer.data)
 
 

@@ -48,7 +48,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
-    resume = models.CharField(max_length=500)
+    resume = models.CharField(max_length=1000)
+    recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
 
     def __str__(self):
