@@ -1,14 +1,12 @@
 from django.urls import re_path
 from django.conf import settings
 from xml.etree.ElementInclude import include
-from rest_framework.routers import DefaultRouter
 from django.urls import path,include
 from knox import views as knox_views
 from .views import RegisterAPI
 from .views import LoginAPI
 from .views import DeleteAPI
 from app import views
-from rest_framework import routers
 
 
 urlpatterns = [
