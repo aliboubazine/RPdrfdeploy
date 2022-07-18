@@ -8,16 +8,16 @@ from .views import LoginAPI
 from .views import DeleteAPI
 from app import views
 
-
 urlpatterns = [
-    path('api/register/', RegisterAPI.as_view(), name='register'),
-    path('api/login/', LoginAPI.as_view(), name='login'),
-    path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
-    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
-    path('api/users/',views.UsersApi,name='userlist'),
-    path('api/article/',views.ArticleApi,name='articleslist'),
-    re_path(r'^article/([0-9]+)$',views.ArticleById,name='articledetail'),
-    re_path(r'^article/delete/([0-9]+)$',views.ArticleApi),
-    re_path(r'^user/([0-9]+)$',views.UserById,name='userdetail'),
-    re_path(r'^user/auteur/([0-9]+)$',views.UserToAuteur,name='usertoauteur')
+    path('api/register/', RegisterAPI.as_view(), name='Register'),
+    path('api/login/', LoginAPI.as_view(), name='LogIn'),
+    path('api/logout/', knox_views.LogoutView.as_view(), name='LogOut'),
+    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='LogOutAll'),
+    path('api/users/',views.UsersApi,name='UsersList'),
+    path('api/articles/',views.ArticleApi,name='ArticlesList'),
+    path('api/user/delete/', DeleteAPI.as_view(), name='DeleteUser'),
+    re_path(r'^api/article/([0-9]+)$',views.ArticleById,name='ArticleDetails'),
+    re_path(r'^api/article/delete/([0-9]+)$',views.ArticleApi,name='DeleteArticle'),
+    re_path(r'^api/user/([0-9]+)$',views.UserById,name='UserDetails'),
+    re_path(r'^api/user/auteur/([0-9]+)$',views.UserToAuteur,name='UserToAuteur')
 ]

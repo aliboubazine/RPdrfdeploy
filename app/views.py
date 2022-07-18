@@ -116,8 +116,6 @@ def UserToAuteur(request,id=0):
         user_serializer=UserSerializer(user)
         return Response(user_serializer.data)
 
-
-
 # Article By ID
 @api_view(('GET',))
 def ArticleById(request,id=0):

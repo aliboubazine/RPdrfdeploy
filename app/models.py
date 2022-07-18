@@ -3,8 +3,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.utils import timezone
 
-
-
 class UserManager(BaseUserManager):
 
     def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
@@ -31,7 +29,6 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     U_Id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=30, unique=True)
@@ -44,11 +41,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
   
-
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     resume = models.CharField(max_length=1000)
+    auteur = models.ManyToManyField(User,related_name="articlelist",blank=True)
     recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
 
