@@ -7,6 +7,7 @@ from allauth.account.utils import setup_user_email
 from allauth.account.adapter import get_adapter
 from django.contrib.auth import get_user_model
 from .models import Article
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -55,6 +56,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.save()
         return user
+
+# LogIn Serializer
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError('Incorrect Credentials Passed.')
 
 # Article Serializer
 class ArticleSerializer(serializers.ModelSerializer):
