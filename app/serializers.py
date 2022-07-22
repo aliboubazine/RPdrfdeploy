@@ -6,8 +6,10 @@ from recommendationplatform import settings
 from allauth.account.utils import setup_user_email
 from allauth.account.adapter import get_adapter
 from django.contrib.auth import get_user_model
-from .models import Article
+from .models import Article,User
 from django.contrib.auth import authenticate
+
+from app import models
 
 User = get_user_model()
 
@@ -68,17 +70,26 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError('Incorrect Credentials Passed.')
 
+#AuteurField
+class AuteurField(serializers.StringRelatedField):
+
+    def to_internal_value(self, value):
+        auteur = models.User.objects.filter(username=value)
+        return auteur.get().U_Id
+
 # Article Serializer
 class ArticleSerializer(serializers.ModelSerializer):
-    auteur = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    auteur = AuteurField(many=True)
+    sauvegarde = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','recommendation','date_posted','auteur',)
+        fields = ('A_Id','title','resume','recommendation','date_posted','auteur','sauvegarde')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
     articlelist = ArticleSerializer(many=True, read_only=True)
+    sauvegardelist = ArticleSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('U_Id','password','last_login','is_superuser','username','email','first_name','last_name','groups','user_permissions','articlelist')
+        fields = ('U_Id','password','last_login','is_superuser','username','email','first_name','last_name','groups','user_permissions','articlelist','sauvegardelist')
         read_only_fields = ('email', )        

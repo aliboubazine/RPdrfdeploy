@@ -35,17 +35,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=250, unique=True)
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
+    etablissement = models.CharField(max_length=100,blank=True,null=True)
+    fonction = models.CharField(max_length=100,blank=True,null=True)
+    adresse = models.CharField(max_length=200,blank=True,null=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
+
+    def __str__(self):
+        return '%d:%s' % (self.U_Id, self.username)
   
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     resume = models.CharField(max_length=1000)
     auteur = models.ManyToManyField(User,related_name="articlelist",blank=True)
+    sauvegarde = models.ManyToManyField(User,related_name="sauvegardelist",blank=True)
     recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
 

@@ -19,5 +19,6 @@ urlpatterns = [
     re_path(r'^api/article/([0-9]+)$',views.ArticleById,name='ArticleDetails'),
     re_path(r'^api/article/delete/([0-9]+)$',views.ArticleApi,name='DeleteArticle'),
     re_path(r'^api/user/([0-9]+)$',views.UserById,name='UserDetails'),
-    re_path(r'^api/user/auteur/([0-9]+)$',views.UserToAuteur,name='UserToAuteur')
+    re_path(r'^api/user/auteur/([0-9]+)$',views.UserToAuteur,name='UserToAuteur'),
+    re_path(r'^api/user/sauvegarde/([0-9]+)/([0-9]+)$',views.AddSauvegarde,name='UserSauvegarde')
 ]

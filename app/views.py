@@ -124,4 +124,15 @@ def ArticleById(request,id=0):
     if request.method=='GET':
         article = Article.objects.get(A_Id=id)
         article_serializer=ArticleSerializer(article)
-        return Response(article_serializer.data)              
+        return Response(article_serializer.data)
+
+# Add sauvegarde 
+@api_view(('PUT',))
+def AddSauvegarde(request,id_a=0,id_u=0):
+    if request.method=='PUT':
+        article=Article.objects.get(A_Id=id_a)
+        article.sauvegarde.add(id_u)
+        article.save()
+        article_serializer=ArticleSerializer(article)
+        return Response(article_serializer.data)
+
