@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import parser_classes
 from rest_framework import viewsets
+from rest_framework.decorators import authentication_classes, permission_classes
 
 # User APIs
 
@@ -39,9 +40,10 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+        token = AuthToken.objects.create(user)[1]
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
+            "token": token,
         })
 # Delete API
 class DeleteAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -86,8 +88,10 @@ def ArticleApi(request,id=0):
 
 # All Users Api
 @api_view(('GET','PUT',))
+@authentication_classes([])
+@permission_classes([])
 def UsersApi(request,):
-    if request.method=='GET':
+    if request.method=='GET' :
        users = User.objects.all()
        users_serializer = UserSerializer(users,many=True)
        return Response(users_serializer.data) 
@@ -102,6 +106,8 @@ def UsersApi(request,):
 
 # User By ID
 @api_view(('GET',))
+@authentication_classes([])
+@permission_classes([])
 def UserById(request,id=0):
     if request.method=='GET':
         user = User.objects.get(U_Id=id)
@@ -120,13 +126,15 @@ def UserToAuteur(request,id=0):
 
 # Article By ID
 @api_view(('GET',))
+@authentication_classes([])
+@permission_classes([])
 def ArticleById(request,id=0):
     if request.method=='GET':
         article = Article.objects.get(A_Id=id)
         article_serializer=ArticleSerializer(article)
         return Response(article_serializer.data)
 
-# Add sauvegarde 
+# Add Sauvegarde 
 @api_view(('PUT',))
 def AddSauvegarde(request,id_a=0,id_u=0):
     if request.method=='PUT':
@@ -136,3 +144,34 @@ def AddSauvegarde(request,id_a=0,id_u=0):
         article_serializer=ArticleSerializer(article)
         return Response(article_serializer.data)
 
+# Remove Sauvegarde
+@api_view(('PUT',))
+def RemoveSauvegarde(request,id_a=0,id_u=0):
+    if request.method=='PUT':
+        article=Article.objects.get(A_Id=id_a)
+        article.sauvegarde.remove(id_u)
+        article.save()
+        article_serializer=ArticleSerializer(article)
+        return Response(article_serializer.data)
+
+# Add Recommendation 
+@api_view(('PUT',))
+def AddRecommendation(request,id_a=0,id_u=0):
+    if request.method=='PUT':
+        article=Article.objects.get(A_Id=id_a)
+        article.recommendationlist.add(id_u)
+        article.recommendation=article.recommendation+1
+        article.save()
+        article_serializer=ArticleSerializer(article)
+        return Response(article_serializer.data)
+
+# Remove Recommendation
+@api_view(('PUT',))
+def RemoveRecommendation(request,id_a=0,id_u=0):
+    if request.method=='PUT':
+        article=Article.objects.get(A_Id=id_a)
+        article.recommendationlist.remove(id_u)
+        article.recommendation=article.recommendation-1
+        article.save()
+        article_serializer=ArticleSerializer(article)
+        return Response(article_serializer.data)        

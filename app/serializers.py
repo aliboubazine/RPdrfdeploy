@@ -20,9 +20,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'password': {'write_only': True}}          
     email = serializers.EmailField(required=settings.ACCOUNT_EMAIL_REQUIRED)
-    first_name = serializers.CharField(required=False, write_only=True)
-    last_name = serializers.CharField(required=False, write_only=True)
-
     password1 = serializers.CharField(required=True, write_only=True)
     password2 = serializers.CharField(required=True, write_only=True)
 
@@ -40,11 +37,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def get_cleaned_data(self):
         return {
+            'username': self.validated_data.get('username', ''),
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', ''),
             'user_type': self.validated_data.get('user_type', ''),
             'password1': self.validated_data.get('password1', ''),
             'email': self.validated_data.get('email', ''),
+            'etablissement': self.validated_data.get('etablissement', ''),
+            'fonction': self.validated_data.get('fonction', ''),
+            'adresse': self.validated_data.get('adresse', ''),
         }
 
     def save(self, request):
@@ -81,15 +82,17 @@ class AuteurField(serializers.StringRelatedField):
 class ArticleSerializer(serializers.ModelSerializer):
     auteur = AuteurField(many=True)
     sauvegarde = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','recommendation','date_posted','auteur','sauvegarde')
+        fields = ('A_Id','title','resume','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
     articlelist = ArticleSerializer(many=True, read_only=True)
     sauvegardelist = ArticleSerializer(many=True, read_only=True)
+    recommendationlist = ArticleSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('U_Id','password','last_login','is_superuser','username','email','first_name','last_name','groups','user_permissions','articlelist','sauvegardelist')
+        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist')
         read_only_fields = ('email', )        

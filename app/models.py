@@ -53,6 +53,7 @@ class Article (models.Model):
     resume = models.CharField(max_length=1000)
     auteur = models.ManyToManyField(User,related_name="articlelist",blank=True)
     sauvegarde = models.ManyToManyField(User,related_name="sauvegardelist",blank=True)
+    recommendationlist = models.ManyToManyField(User,related_name="recommendationlist",blank=True)
     recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
 

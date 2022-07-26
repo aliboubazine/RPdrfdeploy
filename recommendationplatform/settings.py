@@ -66,6 +66,11 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'app.serializers.UserSerializer'
 }
 
+# will create tokens that never expire
+REST_KNOX = {
+       'TOKEN_TTL': None,  # will create tokens that never expire
+    }
+
 ROOT_URLCONF = 'recommendationplatform.urls'
 
 TEMPLATES = [
