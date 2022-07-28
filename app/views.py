@@ -174,4 +174,28 @@ def RemoveRecommendation(request,id_a=0,id_u=0):
         article.recommendation=article.recommendation-1
         article.save()
         article_serializer=ArticleSerializer(article)
-        return Response(article_serializer.data)        
+        return Response(article_serializer.data)
+
+# Update Article By Id 
+@api_view(('PATCH',))
+def UpdateArticle(request,id_a=0):
+    if request.method=='PATCH':
+        article_data=request.data
+        article=Article.objects.get(A_Id=id_a)
+        article_serializer=ArticleSerializer(article,data=article_data,partial=True)
+        if article_serializer.is_valid():
+            article_serializer.save()
+            return Response(article_serializer.data)
+        return Response("Failed to Add")
+
+# Update User By Id 
+@api_view(('PATCH',))
+def UpdateUser(request,id_u=0):
+    if request.method=='PATCH':
+        user_data=request.data
+        user=User.objects.get(U_Id=id_u)
+        user_serializer=UserSerializer(user,data=user_data,partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(user_serializer.data)
+        return Response("Failed to Add")     

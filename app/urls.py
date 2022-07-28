@@ -23,5 +23,7 @@ urlpatterns = [
     re_path(r'^api/user/sauvegarde/([0-9]+)/([0-9]+)$',views.AddSauvegarde,name='UserAddSauvegarde'),
     re_path(r'^api/user/sauvegarde/delete/([0-9]+)/([0-9]+)$',views.RemoveSauvegarde,name='UserDeleteSauvegarde'),
     re_path(r'^api/user/recommende/([0-9]+)/([0-9]+)$',views.AddRecommendation,name='UserAddRecommendation'),
-    re_path(r'^api/user/recommende/delete/([0-9]+)/([0-9]+)$',views.RemoveRecommendation,name='UserDeleteRecommendation')
+    re_path(r'^api/user/recommende/delete/([0-9]+)/([0-9]+)$',views.RemoveRecommendation,name='UserDeleteRecommendation'),
+    re_path(r'^api/article/update/([0-9]+)$',views.UpdateArticle,name='UpdateArticle'),
+    re_path(r'^api/user/update/([0-9]+)$',views.UpdateUser,name='UpdateUser')
 ]
