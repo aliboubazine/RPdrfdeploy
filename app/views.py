@@ -1,5 +1,4 @@
 from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -7,15 +6,11 @@ from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import login
 from rest_framework import permissions
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.views import LoginView as KnoxLoginView
-from rest_framework.viewsets import ModelViewSet
-from .models import Article,UserManager,User
+from .models import Article,User
 from .serializers import ArticleSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import parser_classes
-from rest_framework import viewsets
 from rest_framework.decorators import authentication_classes, permission_classes
 
 # User APIs
@@ -99,7 +94,7 @@ def UsersApi(request,):
         user_data=request.data
         user=User.objects.get(U_Id=user_data['U_Id'])
         user_serializer=UserSerializer(user,data=user_data)
-        if user_serializer.is_valid():
+        if user_serializer.is_valid(raise_exception=True):
             user_serializer.save()
             return Response("Updated Successfully")
         return Response("Failed to Update")   

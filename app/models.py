@@ -38,9 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     etablissement = models.CharField(max_length=100,blank=True,null=True)
     fonction = models.CharField(max_length=100,blank=True,null=True)
     adresse = models.CharField(max_length=200,blank=True,null=True)
-
+    suivis = models.ForeignKey('self', blank=True, null=True,on_delete=models.CASCADE)
     objects = UserManager()
-
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
 
