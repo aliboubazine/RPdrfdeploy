@@ -38,13 +38,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     etablissement = models.CharField(max_length=100,blank=True,null=True)
     fonction = models.CharField(max_length=100,blank=True,null=True)
     adresse = models.CharField(max_length=200,blank=True,null=True)
-    suivis = models.ForeignKey('self', blank=True, null=True,on_delete=models.CASCADE)
+    suivis = models.ForeignKey('self',related_name="suivislist",blank=True,null=True,on_delete=models.CASCADE)
+    suivisnb = models.IntegerField(default=0)
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
 
     def __str__(self):
-        return '%d:%s' % (self.U_Id, self.username)
+        return '%d : %s' % (self.U_Id, self.username)
   
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
@@ -59,4 +60,11 @@ class Article (models.Model):
     def __str__(self):
         return self.title
 
- 
+class SiteUrl(models.Model):
+    S_Id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    url = models.CharField(max_length=1000)
+    owner =  models.ForeignKey(User,related_name="Siteslist",blank=True,null=True,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s : %s' % (self.name, self.url)

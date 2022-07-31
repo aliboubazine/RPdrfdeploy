@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='LogOutAll'),
     path('api/users/',views.UsersApi,name='UsersList'),
     path('api/articles/',views.ArticleApi,name='ArticlesList'),
+    path('api/sitesurls/',views.SiteUrlApi,name='SitesUrlsList'),
     path('api/user/delete/', DeleteAPI.as_view(), name='DeleteUser'),
     re_path(r'^api/article/([0-9]+)$',views.ArticleById,name='ArticleDetails'),
     re_path(r'^api/article/delete/([0-9]+)$',views.ArticleApi,name='DeleteArticle'),
@@ -25,5 +26,7 @@ urlpatterns = [
     re_path(r'^api/user/recommende/([0-9]+)/([0-9]+)$',views.AddRecommendation,name='UserAddRecommendation'),
     re_path(r'^api/user/recommende/delete/([0-9]+)/([0-9]+)$',views.RemoveRecommendation,name='UserDeleteRecommendation'),
     re_path(r'^api/article/update/([0-9]+)$',views.UpdateArticle,name='UpdateArticle'),
-    re_path(r'^api/user/update/([0-9]+)$',views.UpdateUser,name='UpdateUser')
+    re_path(r'^api/user/update/([0-9]+)$',views.UpdateUser,name='UpdateUser'),
+    re_path(r'^api/user/suivis/([0-9]+)/([0-9]+)$',views.AddSuivis,name='UserAddSuivis'),
+    re_path(r'^api/user/suivis/delete/([0-9]+)/([0-9]+)$',views.RemoveSuivis,name='UserRemoveSuivis')
 ]

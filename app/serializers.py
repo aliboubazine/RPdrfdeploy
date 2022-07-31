@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
 from recommendationplatform import settings
-from .models import Article,User
+from .models import Article,User,SiteUrl
 from django.contrib.auth import authenticate
 from app import models
 from django.contrib.auth import get_user_model
@@ -29,7 +29,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             etablissement=self.validated_data['etablissement'],
             fonction=self.validated_data['fonction'],
             adresse=self.validated_data['adresse'],
-            suivis=self.validated_data['suivis'],
         )
         password1=self.validated_data['password1']
         password2=self.validated_data['password2']
@@ -57,12 +56,18 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError('Incorrect Credentials Passed.')
 
-#AuteurField
+# AuteurField
 class AuteurField(serializers.StringRelatedField):
 
     def to_internal_value(self, value):
         auteur = models.User.objects.filter(username=value)
         return auteur.get().U_Id
+
+# Site Urls Serializer
+class SiteUrlSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = SiteUrl
+        fields = ('S_Id','name','url','owner')
 
 # Article Serializer
 class ArticleSerializer(serializers.ModelSerializer):
@@ -78,8 +83,9 @@ class UserSerializer(serializers.ModelSerializer):
     articlelist = ArticleSerializer(many=True, read_only=True)
     sauvegardelist = ArticleSerializer(many=True, read_only=True)
     recommendationlist = ArticleSerializer(many=True, read_only=True)
-    suivis = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    suivislist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    Siteslist = serializers.StringRelatedField(many=True)
     class Meta:
         model = User
-        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivis')
+        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','suivisnb','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
         read_only_fields = ('email', ) 

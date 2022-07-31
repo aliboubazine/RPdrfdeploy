@@ -6,8 +6,8 @@ from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import login
 from rest_framework import permissions
-from .models import Article,User
-from .serializers import ArticleSerializer
+from .models import Article,User,SiteUrl
+from .serializers import ArticleSerializer,SiteUrlSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import parser_classes
@@ -193,4 +193,55 @@ def UpdateUser(request,id_u=0):
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(user_serializer.data)
-        return Response("Failed to Add")     
+        return Response("Failed to Add")
+
+# Add Suivis
+@api_view(('PUT',))
+def AddSuivis(reqest,id_u=0,id_s=0):
+    if reqest.method=='PUT':
+        user=User.objects.get(U_Id=id_u)
+        user2=User.objects.get(U_Id=id_s)
+        user.suivislist.add(user2)
+        user.suivisnb=user.suivisnb+1
+        user.save()
+        user_serializer=UserSerializer(user)
+        return Response(user_serializer.data)
+
+# Remove Suivis
+@api_view(('PUT',))
+def RemoveSuivis(reqest,id_u=0,id_s=0):
+    if reqest.method=='PUT':
+        user=User.objects.get(U_Id=id_u)
+        user2=User.objects.get(U_Id=id_s)
+        user.suivislist.remove(user2)
+        user.suivisnb=user.suivisnb-1
+        user.save()
+        user_serializer=UserSerializer(user)
+        return Response(user_serializer.data)        
+
+# Sites Urls APIs
+@api_view(('GET','POST','PUT','DELETE',))
+def SiteUrlApi(request,id=0):
+    if request.method=='GET':
+        siteurls = SiteUrl.objects.all()
+        siteurls_serializer = SiteUrlSerializer(siteurls,many=True)
+        return Response(siteurls_serializer.data)
+    elif request.method=='POST':
+        siteurl_data=request.data
+        siteurl_serializer=SiteUrlSerializer(data=siteurl_data)
+        if siteurl_serializer.is_valid(raise_exception=True):
+            siteurl_serializer.save()
+            return Response("Added Successfully")
+        return Response("Failed to Add")
+    elif request.method=='PUT':
+        siteurl_data=request.data
+        siteurl=SiteUrl.objects.get(S_Id=siteurl_data['S_Id'])
+        siteurl_serializer=SiteUrlSerializer(siteurl,data=siteurl_data)
+        if siteurl_serializer.is_valid():
+            siteurl_serializer.save()
+            return Response("Updated Successfully")
+        return Response("Failed to Update")
+    elif request.method=='DELETE':
+        siteurl=SiteUrl.objects.get(A_Id=id)
+        siteurl.delete()
+        return Response("Deleted Successfully")             
