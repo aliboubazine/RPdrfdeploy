@@ -1,7 +1,6 @@
 from django.urls import re_path
 from django.conf import settings
-from xml.etree.ElementInclude import include
-from django.urls import path,include
+from django.urls import path
 from knox import views as knox_views
 from .views import RegisterAPI
 from .views import LoginAPI

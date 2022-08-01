@@ -1,4 +1,3 @@
-from dataclasses import fields
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
@@ -29,6 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             etablissement=self.validated_data['etablissement'],
             fonction=self.validated_data['fonction'],
             adresse=self.validated_data['adresse'],
+            bio=self.validated_data['bio'],
         )
         password1=self.validated_data['password1']
         password2=self.validated_data['password2']
@@ -76,7 +76,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
+        fields = ('A_Id','title','resume','fichier','urlfichier','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
@@ -87,5 +87,5 @@ class UserSerializer(serializers.ModelSerializer):
     Siteslist = serializers.StringRelatedField(many=True)
     class Meta:
         model = User
-        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','suivisnb','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
+        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','suivisnb','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
         read_only_fields = ('email', ) 

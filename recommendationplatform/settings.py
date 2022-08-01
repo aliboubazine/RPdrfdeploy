@@ -1,18 +1,13 @@
 from pathlib import Path
 import os
+import pymysql
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-$a2etz#+3ljb=-3-7zm%yz&r!r5_o#d#pfr9pc70bn%a02(ei('
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-#ALLOWED_HOSTS = ['localhost','recommendationplatformdrf.herokuapp.com']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,25 +45,18 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'knox.auth.TokenAuthentication',
-#       'rest_framework.authentication.TokenAuthentication',
-#       'rest_framework.authentication.SessionAuthentication',
-#       'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-#   'DEFAULT_PERMISSION_CLASSES': (
-#       'rest_framework.permissions.IsAdminUser',
-#   ),
 }
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'app.serializers.UserSerializer'
 }
 
-# will create tokens that never expire
 REST_KNOX = {
-       'TOKEN_TTL': None,  # will create tokens that never expire
+       'TOKEN_TTL': None,
     }
 
 ROOT_URLCONF = 'recommendationplatform.urls'
@@ -91,10 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'recommendationplatform.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-import pymysql
 pymysql.install_as_MySQLdb()
 
 DATABASES = {
@@ -107,9 +92,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -126,9 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -137,25 +116,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-#STATIC_URL = 'static/'
-#STATIC_ROOT = os.path.join(BASE_DIR,'static')
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
-#STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static'),
-#)
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 AUTH_USER_MODEL = 'app.User'
 ACCOUNT_EMAIL_REQUIRED = False

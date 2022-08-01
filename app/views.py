@@ -1,10 +1,8 @@
-from rest_framework.decorators import api_view, renderer_classes
-from django.shortcuts import render
+from rest_framework.decorators import api_view
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
-from django.contrib.auth import login
 from rest_framework import permissions
 from .models import Article,User,SiteUrl
 from .serializers import ArticleSerializer,SiteUrlSerializer
