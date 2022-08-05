@@ -84,7 +84,7 @@ class UserSerializer(serializers.ModelSerializer):
     sauvegardelist = ArticleSerializer(many=True, read_only=True)
     recommendationlist = ArticleSerializer(many=True, read_only=True)
     suivislist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
-    Siteslist = serializers.StringRelatedField(many=True)
+    Siteslist = SiteUrlSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','suivisnb','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
