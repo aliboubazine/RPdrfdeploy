@@ -25,6 +25,7 @@ class RegisterAPI(generics.GenericAPIView):
         "user": UserSerializer(user, context=self.get_serializer_context()).data,
         "token": AuthToken.objects.create(user)[1]
         })
+
 # Login API
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -38,6 +39,7 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
         })
+
 # Delete API
 class DeleteAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
@@ -217,7 +219,7 @@ def RemoveSuivis(reqest,id_u=0,id_s=0):
         user_serializer=UserSerializer(user)
         return Response(user_serializer.data)        
 
-# Sites Urls APIs
+# Site Url APIs
 @api_view(('GET','POST','PUT','DELETE',))
 def SiteUrlApi(request,id=0):
     if request.method=='GET':
@@ -240,6 +242,6 @@ def SiteUrlApi(request,id=0):
             return Response("Updated Successfully")
         return Response("Failed to Update")
     elif request.method=='DELETE':
-        siteurl=SiteUrl.objects.get(A_Id=id)
+        siteurl=SiteUrl.objects.get(S_Id=id)
         siteurl.delete()
         return Response("Deleted Successfully")             

@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
     'rest_framework',
     'knox',
     'app',
@@ -51,6 +52,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
 
 ELASTICSEARCH_DSL = {
@@ -86,7 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'recommendationplatform.wsgi.application'
-
 
 pymysql.install_as_MySQLdb()
 

@@ -29,6 +29,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             fonction=self.validated_data['fonction'],
             adresse=self.validated_data['adresse'],
             bio=self.validated_data['bio'],
+            last_login=self.validated_data['last_login'],
         )
         password1=self.validated_data['password1']
         password2=self.validated_data['password2']
@@ -56,14 +57,14 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError('Incorrect Credentials Passed.')
 
-# AuteurField
+# Auteur Field
 class AuteurField(serializers.StringRelatedField):
 
     def to_internal_value(self, value):
         auteur = models.User.objects.filter(username=value)
         return auteur.get().U_Id
 
-# Site Urls Serializer
+# Site Url Serializer
 class SiteUrlSerializer(serializers.ModelSerializer):
     class Meta :
         model = SiteUrl
@@ -87,5 +88,5 @@ class UserSerializer(serializers.ModelSerializer):
     Siteslist = SiteUrlSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','suivisnb','is_superuser','last_login','groups','user_permissions','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
+        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','suivisnb','last_login','is_superuser','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
         read_only_fields = ('email', ) 

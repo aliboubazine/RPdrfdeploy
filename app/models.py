@@ -3,6 +3,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.utils import timezone
 
+# UserManager Model
 class UserManager(BaseUserManager):
 
     def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
@@ -29,6 +30,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+# User Model 
 class User(AbstractBaseUser, PermissionsMixin):
     U_Id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=30, unique=True)
@@ -40,14 +42,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     adresse = models.CharField(max_length=200,blank=True,null=True)
     bio = models.CharField(max_length=2000,blank=True,null=True)
     suivis = models.ForeignKey('self',related_name="suivislist",blank=True,null=True,on_delete=models.CASCADE)
-    suivisnb = models.IntegerField(default=0)
+    suivisnb = models.IntegerField(default=0,null=True,blank=True)
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
 
     def __str__(self):
         return '%d : %s' % (self.U_Id, self.username)
-  
+
+# Article Model  
 class Article (models.Model):
     A_Id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
@@ -63,6 +66,7 @@ class Article (models.Model):
     def __str__(self):
         return self.title
 
+# SiteUrl Model
 class SiteUrl(models.Model):
     S_Id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
