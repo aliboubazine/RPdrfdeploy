@@ -37,6 +37,12 @@ class UserDocument(Document):
             'is_superuser'          
         ]
         related_models = [User,Article,SiteUrl]
+    
+    def get_instances_from_related(self,related_instance):
+        if isinstance(related_instance,User):
+            return related_instance.suivis
+        if isinstance(related_instance,User):
+            return related_instance.Siteslist.all()                 
 
 # Article Document
 @registry.register_document
@@ -66,6 +72,14 @@ class ArticleDocument(Document):
         ]
         related_models = [User,Article]
 
+    def get_instances_from_related(self,related_instance):
+        if isinstance(related_instance,Article):
+            return related_instance.auteur.all()
+        elif isinstance(related_instance,Article):
+            return related_instance.sauvegarde.all()
+        elif isinstance(related_instance,Article):
+            return related_instance.recommendationlist.all()
+
 # SiteUrl Document
 @registry.register_document
 class SiteUrlDocument(Document):
@@ -86,4 +100,8 @@ class SiteUrlDocument(Document):
             'name',
             'url'
         ]
-        related_models = [User]  
+        related_models = [User]
+
+    def get_instances_from_related(self,related_instance):
+        if isinstance(related_instance,SiteUrl):
+            return related_instance.owner                          

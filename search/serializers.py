@@ -1,4 +1,4 @@
-from .documents import UserDocument,ArticleDocument,SiteUrlDocument
+from .documents import UserDocument,ArticleDocument
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
 # User Document Serializer
@@ -27,14 +27,4 @@ class ArticleDocumentSerializer(DocumentSerializer):
             'resume',
             'recommendation',
             'date_posted'
-        ]
-
-# SiteUrl Document Serializer
-class SiteUrlDocumentSerializer(DocumentSerializer):
-    class Meta :
-        document = SiteUrlDocument
-        fields = [
-            'S_Id',
-            'name',
-            'url'
         ]                           
