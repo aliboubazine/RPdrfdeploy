@@ -8,14 +8,14 @@ from .views import DeleteAPI
 from app import views
 
 urlpatterns = [
-    path('api/register/', RegisterAPI.as_view(), name='Register'),
-    path('api/login/', LoginAPI.as_view(), name='LogIn'),
-    path('api/logout/', knox_views.LogoutView.as_view(), name='LogOut'),
-    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='LogOutAll'),
+    path('api/register/', RegisterAPI.as_view(),name='Register'),
+    path('api/login/', LoginAPI.as_view(),name='LogIn'),
+    path('api/logout/', knox_views.LogoutView.as_view(),name='LogOut'),
+    path('api/logoutall/', knox_views.LogoutAllView.as_view(),name='LogOutAll'),
     path('api/users/',views.UsersApi,name='UsersList'),
     path('api/articles/',views.ArticleApi,name='ArticlesList'),
     path('api/sitesurls/',views.SiteUrlApi,name='SitesUrlsList'),
-    path('api/user/delete/', DeleteAPI.as_view(), name='DeleteUser'),
+    path('api/user/delete/', DeleteAPI.as_view(),name='DeleteUser'),
     re_path(r'^api/article/([0-9]+)$',views.ArticleById,name='ArticleDetails'),
     re_path(r'^api/article/delete/([0-9]+)$',views.ArticleApi,name='DeleteArticle'),
     re_path(r'^api/sitesurl/delete/([0-9]+)$',views.SiteUrlApi,name='DeleteSitesUrl'),

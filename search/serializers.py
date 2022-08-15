@@ -14,7 +14,7 @@ class UserDocumentSerializer(DocumentSerializer):
             'etablissement',
             'fonction',
             'adresse',
-            'suivisnb',
+            'suivisnb'
         ]
 
 # Article Document Serializer

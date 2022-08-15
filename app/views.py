@@ -130,7 +130,7 @@ def ArticleById(request,id=0):
         return Response(article_serializer.data)
 
 # Add Sauvegarde 
-@api_view(('PUT',))
+@api_view(('PATCH',))
 def AddSauvegarde(request,id_a=0,id_u=0):
     if request.method=='PUT':
         article=Article.objects.get(A_Id=id_a)
@@ -140,7 +140,7 @@ def AddSauvegarde(request,id_a=0,id_u=0):
         return Response(article_serializer.data)
 
 # Remove Sauvegarde
-@api_view(('PUT',))
+@api_view(('PATCH',))
 def RemoveSauvegarde(request,id_a=0,id_u=0):
     if request.method=='PUT':
         article=Article.objects.get(A_Id=id_a)
@@ -150,7 +150,7 @@ def RemoveSauvegarde(request,id_a=0,id_u=0):
         return Response(article_serializer.data)
 
 # Add Recommendation 
-@api_view(('PUT',))
+@api_view(('PATCH',))
 def AddRecommendation(request,id_a=0,id_u=0):
     if request.method=='PUT':
         article=Article.objects.get(A_Id=id_a)
@@ -161,7 +161,7 @@ def AddRecommendation(request,id_a=0,id_u=0):
         return Response(article_serializer.data)
 
 # Remove Recommendation
-@api_view(('PUT',))
+@api_view(('PATCH',))
 def RemoveRecommendation(request,id_a=0,id_u=0):
     if request.method=='PUT':
         article=Article.objects.get(A_Id=id_a)

@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from .documents import UserDocument,ArticleDocument
 from elasticsearch_dsl import Q
+from elasticsearch_dsl.query import MoreLikeThis
 from .serializers import UserDocumentSerializer,ArticleDocumentSerializer
 
 # Search For User
@@ -56,18 +57,16 @@ class MoreLikeUser(APIView,LimitOffsetPagination):
     search_document = UserDocument
 
     def get(self,request,query):
-        q = Q(
-            'more_like_this',
-            query=query,
+
+        q = MoreLikeThis(
+            like={"_id": query},
             fields=[
-                'username',
-                'email',
-                'first_name',
-                'last_name',
                 'etablissement',
                 'fonction',
                 'adresse',
-            ]
+            ],
+            min_term_freq=1,
+            min_doc_freq=1
         )
         search = self.search_document.search().query(q)
         response = search.execute()
@@ -81,13 +80,15 @@ class MoreLikeArticle(APIView,LimitOffsetPagination):
     search_document = ArticleDocument
 
     def get(self,request,query):
-        q = Q(
-            'more_like_this',
-            like = query,
+
+        q = MoreLikeThis(
+            like ={"_id": query},
             fields=[
                 'title',
-                'resume',
-            ],            
+                'resume'
+            ],
+            min_term_freq=1,
+            min_doc_freq=1            
         )
         search = self.search_document.search().query(q)
         response = search.execute()
