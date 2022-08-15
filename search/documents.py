@@ -32,6 +32,7 @@ class UserDocument(Document):
             'fonction',
             'adresse',
             'bio',
+            'tags',
             'suivisnb',
             'last_login',
             'is_superuser'          
@@ -67,6 +68,7 @@ class ArticleDocument(Document):
             'resume',
             'fichier',
             'urlfichier',
+            'tags',
             'recommendation',
             'date_posted'
         ]

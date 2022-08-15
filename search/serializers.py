@@ -14,6 +14,7 @@ class UserDocumentSerializer(DocumentSerializer):
             'etablissement',
             'fonction',
             'adresse',
+            'tags',
             'suivisnb'
         ]
 
@@ -25,6 +26,7 @@ class ArticleDocumentSerializer(DocumentSerializer):
             'A_Id',
             'title',
             'resume',
+            'tags',
             'recommendation',
             'date_posted'
         ]                           

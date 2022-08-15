@@ -23,6 +23,7 @@ class SearchUser(APIView,LimitOffsetPagination):
                 'etablissement',
                 'fonction',
                 'adresse',
+                'tags'
             ]
         )
         search = self.search_document.search().query(q)
@@ -43,6 +44,7 @@ class SearchArticle(APIView,LimitOffsetPagination):
             fields=[
                 'title',
                 'resume',
+                'tags'
             ]
         )
         search = self.search_document.search().query(q)
@@ -64,6 +66,7 @@ class MoreLikeUser(APIView,LimitOffsetPagination):
                 'etablissement',
                 'fonction',
                 'adresse',
+                'tags'
             ],
             min_term_freq=1,
             min_doc_freq=1
@@ -85,7 +88,8 @@ class MoreLikeArticle(APIView,LimitOffsetPagination):
             like ={"_id": query},
             fields=[
                 'title',
-                'resume'
+                'resume',
+                'tags'
             ],
             min_term_freq=1,
             min_doc_freq=1            

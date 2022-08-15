@@ -132,7 +132,7 @@ def ArticleById(request,id=0):
 # Add Sauvegarde 
 @api_view(('PATCH',))
 def AddSauvegarde(request,id_a=0,id_u=0):
-    if request.method=='PUT':
+    if request.method=='PATCH':
         article=Article.objects.get(A_Id=id_a)
         article.sauvegarde.add(id_u)
         article.save()
@@ -142,7 +142,7 @@ def AddSauvegarde(request,id_a=0,id_u=0):
 # Remove Sauvegarde
 @api_view(('PATCH',))
 def RemoveSauvegarde(request,id_a=0,id_u=0):
-    if request.method=='PUT':
+    if request.method=='PATCH':
         article=Article.objects.get(A_Id=id_a)
         article.sauvegarde.remove(id_u)
         article.save()
@@ -152,7 +152,7 @@ def RemoveSauvegarde(request,id_a=0,id_u=0):
 # Add Recommendation 
 @api_view(('PATCH',))
 def AddRecommendation(request,id_a=0,id_u=0):
-    if request.method=='PUT':
+    if request.method=='PATCH':
         article=Article.objects.get(A_Id=id_a)
         article.recommendationlist.add(id_u)
         article.recommendation=article.recommendation+1
@@ -163,7 +163,7 @@ def AddRecommendation(request,id_a=0,id_u=0):
 # Remove Recommendation
 @api_view(('PATCH',))
 def RemoveRecommendation(request,id_a=0,id_u=0):
-    if request.method=='PUT':
+    if request.method=='PATCH':
         article=Article.objects.get(A_Id=id_a)
         article.recommendationlist.remove(id_u)
         article.recommendation=article.recommendation-1

@@ -43,6 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     bio = models.CharField(max_length=2000,blank=True,null=True)
     suivis = models.ForeignKey('self',related_name="suivislist",blank=True,null=True,on_delete=models.CASCADE)
     suivisnb = models.IntegerField(default=0,null=True,blank=True)
+    tags = models.CharField(max_length=500, blank=True, null=True)
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
@@ -62,6 +63,7 @@ class Article (models.Model):
     recommendationlist = models.ManyToManyField(User,related_name="recommendationlist",blank=True)
     recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
+    tags = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.title

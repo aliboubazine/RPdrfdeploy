@@ -30,6 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             adresse=self.validated_data['adresse'],
             bio=self.validated_data['bio'],
             last_login=self.validated_data['last_login'],
+            tags=self.validated_data['tags']
         )
         password1=self.validated_data['password1']
         password2=self.validated_data['password2']
@@ -77,7 +78,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','fichier','urlfichier','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
+        fields = ('A_Id','title','resume','fichier','urlfichier','tags','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
@@ -88,5 +89,5 @@ class UserSerializer(serializers.ModelSerializer):
     Siteslist = SiteUrlSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','suivisnb','last_login','is_superuser','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
+        fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','tags','suivisnb','last_login','is_superuser','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')
         read_only_fields = ('email', ) 
