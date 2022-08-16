@@ -98,4 +98,48 @@ class MoreLikeArticle(APIView,LimitOffsetPagination):
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
-        return self.get_paginated_response(serializer.data)                        
+        return self.get_paginated_response(serializer.data)
+
+# Most recent articles without tags 
+class MostRecentArticle(APIView,LimitOffsetPagination):
+    article_serializer = ArticleDocumentSerializer
+    search_document = ArticleDocument
+    
+    def get(self,request):
+        search = self.search_document.search().sort('-date_posted')
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.article_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)
+
+# Most recent articles with tags
+class MostRecentArticleTags(APIView,LimitOffsetPagination):
+    article_serializer = ArticleDocumentSerializer
+    search_document = ArticleDocument
+
+    def get(self,request,query):
+        q = Q(
+            'query_string',
+            query=query,
+            fields=[
+                'tags'
+            ]
+        )
+        search = self.search_document.search().query(q)
+        search = search.sort('-date_posted')
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.article_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)
+
+# Most recommended articles  
+class MostRecommendedArticle(APIView,LimitOffsetPagination):
+    article_serializer = ArticleDocumentSerializer
+    search_document = ArticleDocument
+    
+    def get(self,request):
+        search = self.search_document.search().sort('-recommendation')
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.article_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)                
