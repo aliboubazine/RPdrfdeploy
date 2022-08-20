@@ -66,8 +66,7 @@ class ArticleDocument(Document):
             'A_Id',
             'title',
             'resume',
-            'fichier',
-            'urlfichier',
+            'realfile',
             'tags',
             'recommendation',
             'date_posted'

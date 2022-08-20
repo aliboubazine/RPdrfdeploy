@@ -1,6 +1,6 @@
 from dataclasses import fields
 from rest_framework.views import APIView
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import LimitOffsetPagination,PageNumberPagination
 from .documents import UserDocument,ArticleDocument
 from elasticsearch_dsl import Q
 from elasticsearch_dsl.query import MoreLikeThis
@@ -101,7 +101,7 @@ class MoreLikeArticle(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # Most recent articles without tags 
-class MostRecentArticle(APIView,LimitOffsetPagination):
+class MostRecentArticle(APIView,PageNumberPagination):
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
     
@@ -113,7 +113,7 @@ class MostRecentArticle(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # Most recent articles with tags
-class MostRecentArticleTags(APIView,LimitOffsetPagination):
+class MostRecentArticleTags(APIView,PageNumberPagination):
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
 
@@ -133,7 +133,7 @@ class MostRecentArticleTags(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # Most recommended articles  
-class MostRecommendedArticle(APIView,LimitOffsetPagination):
+class MostRecommendedArticle(APIView,PageNumberPagination):
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
     
@@ -142,4 +142,4 @@ class MostRecommendedArticle(APIView,LimitOffsetPagination):
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
-        return self.get_paginated_response(serializer.data)                
+        return self.get_paginated_response(serializer.data)                      

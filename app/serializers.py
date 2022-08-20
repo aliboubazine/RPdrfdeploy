@@ -76,17 +76,18 @@ class ArticleSerializer(serializers.ModelSerializer):
     auteur = AuteurField(many=True)
     sauvegarde = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    realfile = serializers.FileField()
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','fichier','urlfichier','tags','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
+        fields = ('A_Id','title','resume','realfile','tags','recommendation','date_posted','auteur','sauvegarde','recommendationlist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
-    articlelist = ArticleSerializer(many=True, read_only=True)
-    sauvegardelist = ArticleSerializer(many=True, read_only=True)
-    recommendationlist = ArticleSerializer(many=True, read_only=True)
-    suivislist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
-    Siteslist = SiteUrlSerializer(many=True, read_only=True)
+    articlelist = ArticleSerializer(many=True,read_only=True)
+    sauvegardelist = ArticleSerializer(many=True,read_only=True)
+    recommendationlist = ArticleSerializer(many=True,read_only=True)
+    suivislist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),many=True)
+    Siteslist = SiteUrlSerializer(many=True,read_only=True)
     class Meta:
         model = User
         fields = ('U_Id','username','email','password','first_name','last_name','etablissement','fonction','adresse','bio','tags','suivisnb','last_login','is_superuser','articlelist','sauvegardelist','recommendationlist','suivislist','Siteslist')

@@ -9,5 +9,5 @@ urlpatterns = [
     path('api/article/morelike/<str:query>/',MoreLikeArticle.as_view(),name='MoreLikeThisArticle'),
     path('api/article/mostrecent/',MostRecentArticle.as_view(),name='MostRecentArticle'),
     path('api/article/mostrecent/tags/<str:query>/',MostRecentArticleTags.as_view(),name='MostRecentArticleTags'),
-    path('api/article/mostrecommended/',MostRecommendedArticle.as_view(),name='MostRecommendedArticle'),
+    path('api/article/mostrecommended/',MostRecommendedArticle.as_view(),name='MostRecommendedArticle')
 ]

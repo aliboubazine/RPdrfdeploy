@@ -7,7 +7,7 @@ from rest_framework import permissions
 from .models import Article,User,SiteUrl
 from .serializers import ArticleSerializer,SiteUrlSerializer
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
 from rest_framework.decorators import parser_classes
 from rest_framework.decorators import authentication_classes, permission_classes
 
@@ -55,7 +55,7 @@ class DeleteAPI(generics.RetrieveUpdateDestroyAPIView):
 # Articles APIs
 @api_view(('GET','POST','PUT','DELETE',))
 @csrf_exempt
-@parser_classes([JSONParser])
+@parser_classes([JSONParser,MultiPartParser,FormParser])
 def ArticleApi(request,id=0):
     if request.method=='GET':
         articles = Article.objects.all()
@@ -173,6 +173,7 @@ def RemoveRecommendation(request,id_a=0,id_u=0):
 
 # Update Article By Id 
 @api_view(('PATCH',))
+@parser_classes([JSONParser,MultiPartParser,FormParser])
 def UpdateArticle(request,id_a=0):
     if request.method=='PATCH':
         article_data=request.data
@@ -197,8 +198,8 @@ def UpdateUser(request,id_u=0):
 
 # Add Suivis
 @api_view(('PUT',))
-def AddSuivis(reqest,id_u=0,id_s=0):
-    if reqest.method=='PUT':
+def AddSuivis(request,id_u=0,id_s=0):
+    if request.method=='PUT':
         user=User.objects.get(U_Id=id_u)
         user2=User.objects.get(U_Id=id_s)
         user.suivislist.add(user2)
@@ -209,15 +210,15 @@ def AddSuivis(reqest,id_u=0,id_s=0):
 
 # Remove Suivis
 @api_view(('PUT',))
-def RemoveSuivis(reqest,id_u=0,id_s=0):
-    if reqest.method=='PUT':
+def RemoveSuivis(request,id_u=0,id_s=0):
+    if request.method=='PUT':
         user=User.objects.get(U_Id=id_u)
         user2=User.objects.get(U_Id=id_s)
         user.suivislist.remove(user2)
         user.suivisnb=user.suivisnb-1
         user.save()
         user_serializer=UserSerializer(user)
-        return Response(user_serializer.data)        
+        return Response(user_serializer.data)   
 
 # Site Url APIs
 @api_view(('GET','POST','PUT','DELETE',))
