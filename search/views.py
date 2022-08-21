@@ -107,7 +107,7 @@ class MostRecentArticle(APIView,PageNumberPagination):
     
     def get(self,request):
         search = self.search_document.search().sort('-date_posted')
-        search = search[0:100]
+        search = search[0:1000]
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
@@ -128,6 +128,7 @@ class MostRecentArticleTags(APIView,PageNumberPagination):
         )
         search = self.search_document.search().query(q)
         search = search.sort('-date_posted')
+        search = search[0:1000]
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
@@ -140,6 +141,7 @@ class MostRecommendedArticle(APIView,PageNumberPagination):
     
     def get(self,request):
         search = self.search_document.search().sort('-recommendation')
+        search = search[0:1000]
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
