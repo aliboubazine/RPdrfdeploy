@@ -107,6 +107,7 @@ class MostRecentArticle(APIView,PageNumberPagination):
     
     def get(self,request):
         search = self.search_document.search().sort('-date_posted')
+        search = search[0:100]
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
