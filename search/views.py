@@ -1,4 +1,3 @@
-from dataclasses import fields
 from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination,PageNumberPagination
 from .documents import UserDocument,ArticleDocument

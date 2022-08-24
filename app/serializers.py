@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
 from recommendationplatform import settings
 from .models import Article,User,SiteUrl
@@ -58,6 +57,12 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError('Incorrect Credentials Passed.')
 
+# Change Password Serializer        
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
 # Auteur Field
 class AuteurField(serializers.StringRelatedField):
 
@@ -76,7 +81,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     auteur = AuteurField(many=True)
     sauvegarde = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
-    realfile = serializers.FileField()
     class Meta :
         model = Article
         fields = ('A_Id','title','resume','realfile','tags','recommendation','date_posted','auteur','sauvegarde','recommendationlist')

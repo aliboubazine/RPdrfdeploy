@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import path,include
+from django.urls import path
 from search.views import SearchUser,SearchArticle,MoreLikeUser,MoreLikeArticle,MostRecentArticle,MostRecentArticleTags,MostRecommendedArticle
 
 urlpatterns = [

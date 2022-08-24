@@ -1,10 +1,7 @@
-from django.urls import re_path
+from django.urls import re_path,path
 from django.conf import settings
-from django.urls import path
 from knox import views as knox_views
-from .views import RegisterAPI
-from .views import LoginAPI
-from .views import DeleteAPI
+from .views import RegisterAPI,LoginAPI,DeleteAPI,ChangePasswordView
 from app import views
 
 urlpatterns = [
@@ -12,6 +9,7 @@ urlpatterns = [
     path('api/login/', LoginAPI.as_view(),name='LogIn'),
     path('api/logout/', knox_views.LogoutView.as_view(),name='LogOut'),
     path('api/logoutall/', knox_views.LogoutAllView.as_view(),name='LogOutAll'),
+    path('api/changepassword/', ChangePasswordView.as_view(), name='ChangePassword'),
     path('api/users/',views.UsersApi,name='UsersList'),
     path('api/articles/',views.ArticleApi,name='ArticlesList'),
     path('api/sitesurls/',views.SiteUrlApi,name='SitesUrlsList'),

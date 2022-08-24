@@ -1,15 +1,14 @@
 from rest_framework.decorators import api_view
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions,status
 from rest_framework.response import Response
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from .models import Article,User,SiteUrl
-from .serializers import ArticleSerializer,SiteUrlSerializer
+from .serializers import ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
-from rest_framework.decorators import parser_classes
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import parser_classes,authentication_classes, permission_classes
 
 # User APIs
 
@@ -39,6 +38,38 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
         })
+
+# Change Password API
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = [IsAuthenticated,]
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
 
 # Delete API
 class DeleteAPI(generics.RetrieveUpdateDestroyAPIView):
