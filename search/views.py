@@ -6,9 +6,10 @@ from elasticsearch_dsl.query import MoreLikeThis
 from .serializers import UserDocumentSerializer,ArticleDocumentSerializer
 
 # Search For User
-class SearchUser(APIView,LimitOffsetPagination):
+class SearchUser(APIView,PageNumberPagination):
     user_serializer = UserDocumentSerializer
     search_document = UserDocument
+    page_size = 10
 
     def get(self,request,query):
         q = Q(
@@ -32,9 +33,10 @@ class SearchUser(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # Search For Article
-class SearchArticle(APIView,LimitOffsetPagination):
+class SearchArticle(APIView,PageNumberPagination):
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
+    page_size = 10
 
     def get(self,request,query):
         q = Q(
@@ -53,9 +55,10 @@ class SearchArticle(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # More Like This User For Recommendation
-class MoreLikeUser(APIView,LimitOffsetPagination):
+class MoreLikeUser(APIView,PageNumberPagination):
     user_serializer = UserDocumentSerializer
     search_document = UserDocument
+    page_size = 10
 
     def get(self,request,query):
 
@@ -77,9 +80,10 @@ class MoreLikeUser(APIView,LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 # More Like This Article For Recommendation
-class MoreLikeArticle(APIView,LimitOffsetPagination):
+class MoreLikeArticle(APIView,PageNumberPagination):
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
+    page_size = 10
 
     def get(self,request,query):
 
@@ -101,6 +105,7 @@ class MoreLikeArticle(APIView,LimitOffsetPagination):
 
 # Most recent articles without tags 
 class MostRecentArticle(APIView,PageNumberPagination):
+    page_size = 10
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
     
@@ -112,8 +117,37 @@ class MostRecentArticle(APIView,PageNumberPagination):
         serializer = self.article_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)
 
+# Most viewed articles  
+class MostViewedArticle(APIView,PageNumberPagination):
+    page_size = 10
+    article_serializer = ArticleDocumentSerializer
+    search_document = ArticleDocument
+    
+    def get(self,request):
+        search = self.search_document.search().sort('-nbvus')
+        search = search[0:1000]
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.article_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)
+
+# Most viewed articles  
+class MostPostUser(APIView,PageNumberPagination):
+    page_size = 10
+    user_serializer = UserDocumentSerializer
+    search_document = UserDocument
+    
+    def get(self,request):
+        search = self.search_document.search().sort('-nbposts')
+        search = search[0:1000]
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.user_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)                
+
 # Most recent articles with tags
 class MostRecentArticleTags(APIView,PageNumberPagination):
+    page_size = 10
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
 
@@ -135,6 +169,7 @@ class MostRecentArticleTags(APIView,PageNumberPagination):
 
 # Most recommended articles  
 class MostRecommendedArticle(APIView,PageNumberPagination):
+    page_size = 10
     article_serializer = ArticleDocumentSerializer
     search_document = ArticleDocument
     

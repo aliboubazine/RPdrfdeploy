@@ -33,6 +33,7 @@ class UserDocument(Document):
             'adresse',
             'bio',
             'tags',
+            'nbposts',
             'suivisnb',
             'last_login',
             'is_superuser'          
@@ -69,6 +70,7 @@ class ArticleDocument(Document):
             'realfile',
             'tags',
             'recommendation',
+            'nbvus',
             'date_posted'
         ]
         related_models = [User,Article]

@@ -54,10 +54,8 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            # Check old password
             if not self.object.check_password(serializer.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-            # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             response = {
@@ -201,6 +199,26 @@ def RemoveRecommendation(request,id_a=0,id_u=0):
         article.save()
         article_serializer=ArticleSerializer(article)
         return Response(article_serializer.data)
+
+# Add NbVus 
+@api_view(('PATCH',))
+def AddNbVus(request,id_a=0):
+    if request.method=='PATCH':
+        article=Article.objects.get(A_Id=id_a)
+        article.nbvus=article.nbvus+1
+        article.save()
+        article_serializer=ArticleSerializer(article)
+        return Response(article_serializer.data)
+
+# Add NbPosts 
+@api_view(('PATCH',))
+def AddNbPosts(request,id_u=0):
+    if request.method=='PATCH':
+        user=User.objects.get(U_Id=id_u)
+        user.nbposts=user.nbposts+1
+        user.save()
+        user_serializer=UserSerializer(user)
+        return Response(user_serializer.data)                
 
 # Update Article By Id 
 @api_view(('PATCH',))

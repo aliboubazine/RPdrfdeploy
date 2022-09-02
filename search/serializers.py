@@ -15,6 +15,7 @@ class UserDocumentSerializer(DocumentSerializer):
             'fonction',
             'adresse',
             'tags',
+            'nbposts',
             'suivisnb'
         ]
 
@@ -28,5 +29,6 @@ class ArticleDocumentSerializer(DocumentSerializer):
             'resume',
             'tags',
             'recommendation',
+            'nbvus',
             'date_posted'
         ]                           

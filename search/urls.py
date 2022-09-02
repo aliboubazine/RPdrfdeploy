@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from search.views import SearchUser,SearchArticle,MoreLikeUser,MoreLikeArticle,MostRecentArticle,MostRecentArticleTags,MostRecommendedArticle
+from search.views import SearchUser,SearchArticle,MoreLikeUser,MoreLikeArticle,MostRecentArticle,MostRecentArticleTags,MostRecommendedArticle,MostViewedArticle,MostPostUser
 
 urlpatterns = [
     path('api/user/search/<str:query>/',SearchUser.as_view(),name='SearchUser'),
@@ -8,6 +8,8 @@ urlpatterns = [
     path('api/user/morelike/<str:query>/',MoreLikeUser.as_view(),name='MoreLikeThisUser'),
     path('api/article/morelike/<str:query>/',MoreLikeArticle.as_view(),name='MoreLikeThisArticle'),
     path('api/article/mostrecent/',MostRecentArticle.as_view(),name='MostRecentArticle'),
+    path('api/article/mostviewed/',MostViewedArticle.as_view(),name='MostViewedArticle'),
+    path('api/user/mostpost/',MostPostUser.as_view(),name='MostPostUser'),
     path('api/article/mostrecent/tags/<str:query>/',MostRecentArticleTags.as_view(),name='MostRecentArticleTags'),
     path('api/article/mostrecommended/',MostRecommendedArticle.as_view(),name='MostRecommendedArticle')
 ]

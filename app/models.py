@@ -44,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     suivis = models.ForeignKey('self',related_name="suivislist",blank=True,null=True,on_delete=models.CASCADE)
     suivisnb = models.IntegerField(default=0,null=True,blank=True)
     tags = models.CharField(max_length=500, blank=True, null=True)
+    nbposts = models.IntegerField(default=0)
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
@@ -63,6 +64,7 @@ class Article (models.Model):
     recommendation = models.IntegerField(default=0)
     date_posted = models.DateField()
     tags = models.CharField(max_length=500, blank=True, null=True)
+    nbvus = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
