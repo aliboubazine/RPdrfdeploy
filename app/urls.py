@@ -1,7 +1,7 @@
 from django.urls import re_path,path
 from django.conf import settings
 from knox import views as knox_views
-from .views import RegisterAPI,LoginAPI,DeleteAPI,ChangePasswordView
+from .views import RegisterAPI,LoginAPI,DeleteAPI,ChangePasswordView,VerifyEmail
 from app import views
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/login/', LoginAPI.as_view(),name='LogIn'),
     path('api/logout/', knox_views.LogoutView.as_view(),name='LogOut'),
     path('api/logoutall/', knox_views.LogoutAllView.as_view(),name='LogOutAll'),
+    path('emailverify/', VerifyEmail.as_view(), name="EmailVerify"),
     path('api/changepassword/', ChangePasswordView.as_view(), name='ChangePassword'),
     path('api/users/',views.UsersApi,name='UsersList'),
     path('api/articles/',views.ArticleApi,name='ArticlesList'),
@@ -25,6 +26,7 @@ urlpatterns = [
     re_path(r'^api/user/recommende/delete/([0-9]+)/([0-9]+)$',views.RemoveRecommendation,name='UserDeleteRecommendation'),
     re_path(r'^api/article/vu/([0-9]+)$',views.AddNbVus,name='AddNbVus'),
     re_path(r'^api/user/post/([0-9]+)$',views.AddNbPosts,name='AddNbPosts'),
+    re_path(r'^api/user/subpost/([0-9]+)$',views.SubNbPosts,name='SubNbPosts'),
     re_path(r'^api/article/update/([0-9]+)$',views.UpdateArticle,name='UpdateArticle'),
     re_path(r'^api/user/update/([0-9]+)$',views.UpdateUser,name='UpdateUser'),
     re_path(r'^api/user/suivis/([0-9]+)/([0-9]+)$',views.AddSuivis,name='UserAddSuivis'),

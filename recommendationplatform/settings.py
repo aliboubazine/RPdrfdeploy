@@ -3,10 +3,9 @@ import os
 import pymysql
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = 'django-insecure-$a2etz#+3ljb=-3-7zm%yz&r!r5_o#d#pfr9pc70bn%a02(ei('
-
 DEBUG = True
+SITE_ID=1
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -131,3 +130,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'app.User'
 ACCOUNT_EMAIL_REQUIRED = False
+
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'archivage.plateforme@gmail.com'
+EMAIL_HOST_PASSWORD = 'ehttaurfrppawigd'

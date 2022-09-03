@@ -65,6 +65,7 @@ class Article (models.Model):
     date_posted = models.DateField()
     tags = models.CharField(max_length=500, blank=True, null=True)
     nbvus = models.IntegerField(default=0)
+    auteurstr = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.title

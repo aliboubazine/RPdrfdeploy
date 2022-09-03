@@ -83,7 +83,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','realfile','tags','recommendation','nbvus','date_posted','auteur','sauvegarde','recommendationlist')
+        fields = ('A_Id','title','resume','realfile','tags','recommendation','nbvus','date_posted','auteur','auteurstr','sauvegarde','recommendationlist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):

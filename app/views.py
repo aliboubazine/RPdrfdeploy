@@ -9,6 +9,9 @@ from .serializers import ArticleSerializer,SiteUrlSerializer,ChangePasswordSeria
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
 from rest_framework.decorators import parser_classes,authentication_classes, permission_classes
+from .utils import Util
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
 
 # User APIs
 
@@ -20,10 +23,23 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save(request)
+        token = AuthToken.objects.create(user)[1]
+        current_site = get_current_site(request).domain
+        relativeLink = reverse('EmailVerify')
+        absurl = 'http://'+current_site+relativeLink+"?token="+token
+        email_body = 'Hi '+user.username +' Use the link below to verify your email \n'+absurl
+        data = {'email_body': email_body,'to_email': user.email,'email_subject': 'Verify your email'}
+        Util.send_email(data)
         return Response({
         "user": UserSerializer(user, context=self.get_serializer_context()).data,
-        "token": AuthToken.objects.create(user)[1]
+        "token": token
         })
+
+# Verify Email API
+class VerifyEmail(generics.GenericAPIView):
+    def get(self):
+        pass
+
 
 # Login API
 class LoginAPI(generics.GenericAPIView):
@@ -218,7 +234,17 @@ def AddNbPosts(request,id_u=0):
         user.nbposts=user.nbposts+1
         user.save()
         user_serializer=UserSerializer(user)
-        return Response(user_serializer.data)                
+        return Response(user_serializer.data)
+
+# Sub NbPosts 
+@api_view(('PATCH',))
+def SubNbPosts(request,id_u=0):
+    if request.method=='PATCH':
+        user=User.objects.get(U_Id=id_u)
+        user.nbposts=user.nbposts-1
+        user.save()
+        user_serializer=UserSerializer(user)
+        return Response(user_serializer.data)                        
 
 # Update Article By Id 
 @api_view(('PATCH',))

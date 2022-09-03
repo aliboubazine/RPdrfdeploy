@@ -30,5 +30,6 @@ class ArticleDocumentSerializer(DocumentSerializer):
             'tags',
             'recommendation',
             'nbvus',
-            'date_posted'
+            'date_posted',
+            'auteurstr'
         ]                           

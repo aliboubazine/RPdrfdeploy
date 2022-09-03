@@ -71,7 +71,8 @@ class ArticleDocument(Document):
             'tags',
             'recommendation',
             'nbvus',
-            'date_posted'
+            'date_posted',
+            'auteurstr'
         ]
         related_models = [User,Article]
 

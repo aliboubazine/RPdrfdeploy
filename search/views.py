@@ -103,7 +103,7 @@ class MoreLikeArticle(APIView,PageNumberPagination):
         serializer = self.article_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)
 
-# Most recent articles without tags 
+# Most Recent Articles Without Tags 
 class MostRecentArticle(APIView,PageNumberPagination):
     page_size = 10
     article_serializer = ArticleDocumentSerializer
@@ -117,7 +117,7 @@ class MostRecentArticle(APIView,PageNumberPagination):
         serializer = self.article_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)
 
-# Most viewed articles  
+# Most Viewed Articles  
 class MostViewedArticle(APIView,PageNumberPagination):
     page_size = 10
     article_serializer = ArticleDocumentSerializer
@@ -131,7 +131,7 @@ class MostViewedArticle(APIView,PageNumberPagination):
         serializer = self.article_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)
 
-# Most viewed articles  
+# Most Post User  
 class MostPostUser(APIView,PageNumberPagination):
     page_size = 10
     user_serializer = UserDocumentSerializer
@@ -145,7 +145,7 @@ class MostPostUser(APIView,PageNumberPagination):
         serializer = self.user_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)                
 
-# Most recent articles with tags
+# Most Recent Articles With Tags
 class MostRecentArticleTags(APIView,PageNumberPagination):
     page_size = 10
     article_serializer = ArticleDocumentSerializer
@@ -167,7 +167,7 @@ class MostRecentArticleTags(APIView,PageNumberPagination):
         serializer = self.article_serializer(results,many=True)
         return self.get_paginated_response(serializer.data)
 
-# Most recommended articles  
+# Most Recommended Articles  
 class MostRecommendedArticle(APIView,PageNumberPagination):
     page_size = 10
     article_serializer = ArticleDocumentSerializer
@@ -179,4 +179,26 @@ class MostRecommendedArticle(APIView,PageNumberPagination):
         response = search.execute()
         results = self.paginate_queryset(response,request,view=self)
         serializer = self.article_serializer(results,many=True)
-        return self.get_paginated_response(serializer.data)                      
+        return self.get_paginated_response(serializer.data)  
+
+# Following Articles With Auteurstr
+class FollowingArticle(APIView,PageNumberPagination):
+    page_size = 10
+    article_serializer = ArticleDocumentSerializer
+    search_document = ArticleDocument
+
+    def get(self,request,query):
+        q = Q(
+            'query_string',
+            query=query,
+            fields=[
+                'auteurstr'
+            ]
+        )
+        search = self.search_document.search().query(q)
+        search = search.sort('-date_posted')
+        search = search[0:1000]
+        response = search.execute()
+        results = self.paginate_queryset(response,request,view=self)
+        serializer = self.article_serializer(results,many=True)
+        return self.get_paginated_response(serializer.data)                            
