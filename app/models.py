@@ -66,6 +66,7 @@ class Article (models.Model):
     tags = models.CharField(max_length=500, blank=True, null=True)
     nbvus = models.IntegerField(default=0)
     auteurstr = models.CharField(max_length=500, blank=True, null=True)
+    principal = models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -79,3 +80,11 @@ class SiteUrl(models.Model):
 
     def __str__(self):
         return '%s : %s' % (self.name, self.url)
+
+# Comment Model
+class Comment(models.Model):
+    C_Id = models.AutoField(primary_key=True)
+    contenu = models.CharField(max_length=500)
+    comment_date = models.DateField()
+    comment_owner =  models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
+    comment_post =  models.ForeignKey(Article,related_name="commentslist",blank=True,null=True,on_delete=models.CASCADE)

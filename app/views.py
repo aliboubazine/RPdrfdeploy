@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from rest_framework.permissions import IsAuthenticated
-from .models import Article,User,SiteUrl
-from .serializers import ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer
+from .models import Article,User,SiteUrl,Comment
+from .serializers import ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer,CommentSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
 from rest_framework.decorators import parser_classes,authentication_classes, permission_classes
@@ -40,7 +40,6 @@ class VerifyEmail(generics.GenericAPIView):
     def get(self):
         pass
 
-
 # Login API
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -59,14 +58,14 @@ class LoginAPI(generics.GenericAPIView):
 class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     model = User
-    permission_classes = [IsAuthenticated,]
+    permission_classes = []
 
-    def get_object(self, queryset=None):
-        obj = self.request.user
+    def get_object(self,id,queryset=None):
+        obj = User.objects.get(U_Id=id)
         return obj
 
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
+    def update(self, request,id, *args, **kwargs):
+        self.object = self.get_object(id)
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
@@ -320,4 +319,31 @@ def SiteUrlApi(request,id=0):
     elif request.method=='DELETE':
         siteurl=SiteUrl.objects.get(S_Id=id)
         siteurl.delete()
-        return Response("Deleted Successfully")             
+        return Response("Deleted Successfully")
+
+# Comment APIs
+@api_view(('GET','POST','PUT','DELETE',))
+def CommentApi(request,id=0):
+    if request.method=='GET':
+        Comments = Comment.objects.all()
+        comments_serializer = CommentSerializer(Comments,many=True)
+        return Response(comments_serializer.data)
+    elif request.method=='POST':
+        comment_data=request.data
+        comment_serializer=CommentSerializer(data=comment_data)
+        if comment_serializer.is_valid(raise_exception=True):
+            comment_serializer.save()
+            return Response("Added Successfully")
+        return Response("Failed to Add")
+    elif request.method=='PUT':
+        comment_data=request.data
+        comment=Comment.objects.get(C_Id=comment_data['C_Id'])
+        comment_serializer=CommentSerializer(comment,data=comment_data)
+        if comment_serializer.is_valid():
+            comment_serializer.save()
+            return Response("Updated Successfully")
+        return Response("Failed to Update")
+    elif request.method=='DELETE':
+        comment=Comment.objects.get(C_Id=id)
+        comment.delete()
+        return Response("Deleted Successfully")                     

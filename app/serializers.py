@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from recommendationplatform import settings
-from .models import Article,User,SiteUrl
+from .models import Article,User,SiteUrl,Comment
 from django.contrib.auth import authenticate
 from app import models
 from django.contrib.auth import get_user_model
@@ -76,14 +76,21 @@ class SiteUrlSerializer(serializers.ModelSerializer):
         model = SiteUrl
         fields = ('S_Id','name','url','owner')
 
+# Comment Serializer
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Comment
+        fields = ('C_Id','contenu','comment_date','comment_owner','comment_post')        
+
 # Article Serializer
 class ArticleSerializer(serializers.ModelSerializer):
     auteur = AuteurField(many=True)
     sauvegarde = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     recommendationlist = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    commentslist = CommentSerializer(many=True,read_only=True)
     class Meta :
         model = Article
-        fields = ('A_Id','title','resume','realfile','tags','recommendation','nbvus','date_posted','auteur','auteurstr','sauvegarde','recommendationlist')
+        fields = ('A_Id','title','resume','realfile','tags','recommendation','nbvus','date_posted','principal','auteur','auteurstr','sauvegarde','recommendationlist','commentslist')
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import Document,fields
 from django_elasticsearch_dsl.registries import registry
-from app.models import User,Article,SiteUrl
+from app.models import User,Article,SiteUrl,Comment
 
 # User Document
 @registry.register_document
@@ -53,6 +53,7 @@ class ArticleDocument(Document):
     auteur = fields.ObjectField()
     sauvegarde = fields.ObjectField()
     recommendationlist = fields.ObjectField()
+    principal = fields.ObjectField()
 
     class Index:
         name = 'articles'
@@ -108,4 +109,34 @@ class SiteUrlDocument(Document):
 
     def get_instances_from_related(self,related_instance):
         if isinstance(related_instance,SiteUrl):
-            return related_instance.owner                          
+            return related_instance.owner
+
+# Comment Document
+@registry.register_document
+class CommentDocument(Document):
+
+    comment_owner = fields.ObjectField()
+    comment_post = fields.ObjectField()
+
+    class Index:
+        name = 'comments'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }  
+
+    class Django:
+        model = Comment
+        fields = [
+            'C_Id',
+            'contenu',
+            'comment_date'
+        ]
+        related_models = [User,Article]
+
+    def get_instances_from_related(self,related_instance):
+        if isinstance(related_instance,Comment):
+            return related_instance.comment_owner
+    def get_instances_from_related(self,related_instance):
+        if isinstance(related_instance,Comment):
+            return related_instance.comment_post                                               
