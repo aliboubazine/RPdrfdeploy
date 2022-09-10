@@ -63,6 +63,13 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
+# Change Email Serializer        
+class ChangeEmailSerializer(serializers.Serializer):
+    model = User
+    old_email = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+    new_email = serializers.CharField(required=True)
+
 # Auteur Field
 class AuteurField(serializers.StringRelatedField):
 

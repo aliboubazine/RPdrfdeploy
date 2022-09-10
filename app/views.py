@@ -1,14 +1,12 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,parser_classes,authentication_classes,permission_classes
 from rest_framework import generics, permissions,status
 from rest_framework.response import Response
 from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from .serializers import UserSerializer, RegisterSerializer, LoginSerializer,ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer,CommentSerializer,ChangeEmailSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import Article,User,SiteUrl,Comment
-from .serializers import ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer,CommentSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
-from rest_framework.decorators import parser_classes,authentication_classes, permission_classes
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -85,7 +83,40 @@ class ChangePasswordView(generics.UpdateAPIView):
 
             return Response(response)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Change Email API
+class ChangeEmailView(generics.UpdateAPIView):
+    serializer_class = ChangeEmailSerializer
+    model = User
+    permission_classes = []
+
+    def get_object(self,id,queryset=None):
+        obj = User.objects.get(U_Id=id)
+        return obj
+
+    def update(self, request,id, *args, **kwargs):
+        self.object = self.get_object(id)
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            if not self.object.check_password(serializer.data.get("password")):
+                return Response({"password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            self.object.email = serializer.data.get("new_email")
+            self.object.save()
+            email_body = 'Salut '+self.object.username+'!, ceci est votre nouvelle adresse email pour votre compte \n'
+            data = {'email_body': email_body,'to_email': self.object.email,'email_subject': 'Changement Email'}
+            Util.send_email(data)
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'email updated successfully',
+                'data': []
+            }
+
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Delete API
 class DeleteAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -156,7 +187,7 @@ def UserById(request,id=0):
         user_serializer=UserSerializer(user)
         return Response(user_serializer.data)
 
-# User into auteur
+# User Into Auteur
 @api_view(('PUT',))
 def UserToAuteur(request,id=0):
     if request.method=='PUT':
