@@ -27,8 +27,8 @@ class RegisterAPI(generics.GenericAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('EmailVerify')
         absurl = 'http://'+current_site+relativeLink+"?token="+token
-        email_body = 'Hi '+user.username +' Use the link below to verify your email \n'+absurl
-        data = {'email_body': email_body,'to_email': user.email,'email_subject': 'Verify your email'}
+        email_body = 'Salut '+user.username+'!, veuillez cliquer sur le lien pour activer votre compte \n'+absurl
+        data = {'email_body': email_body,'to_email': user.email,'email_subject': 'Activation du compte'}
         Util.send_email(data)
         return Response({
         "user": UserSerializer(user, context=self.get_serializer_context()).data,
@@ -73,6 +73,9 @@ class ChangePasswordView(generics.UpdateAPIView):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
+            email_body = 'Salut '+self.object.username+'!, votre mot de passe a été changé avec succès \n'
+            data = {'email_body': email_body,'to_email': self.object.email,'email_subject': 'Changement de mot de passe'}
+            Util.send_email(data)
             response = {
                 'status': 'success',
                 'code': status.HTTP_200_OK,

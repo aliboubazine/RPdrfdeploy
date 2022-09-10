@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.utils import timezone
+from django.dispatch import receiver
+from django_rest_passwordreset.signals import reset_password_token_created
+from .utils import Util 
 
 # UserManager Model
 class UserManager(BaseUserManager):
@@ -88,3 +91,11 @@ class Comment(models.Model):
     comment_date = models.DateField()
     comment_owner =  models.ForeignKey(User,blank=True,null=True,on_delete=models.CASCADE)
     comment_post =  models.ForeignKey(Article,related_name="commentslist",blank=True,null=True,on_delete=models.CASCADE)
+
+# Reset Password
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    email_plaintext_message = "Code = {}".format(reset_password_token.key)
+    data = {'email_body': email_plaintext_message,'to_email': reset_password_token.user.email,'email_subject': 'Demande de changement de mot de passe'}
+    Util.send_email(data)    

@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
+    'django_rest_passwordreset',
     'rest_framework',
     'knox',
     'app',
@@ -135,5 +136,5 @@ EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'archivage.plateforme@gmail.com'
-EMAIL_HOST_PASSWORD = 'ehttaurfrppawigd'
+EMAIL_HOST_USER = 'Articlepediacommunity@gmail.com'
+EMAIL_HOST_PASSWORD = 'pekutfgjzrbnnmqk'

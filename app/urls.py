@@ -1,4 +1,4 @@
-from django.urls import re_path,path
+from django.urls import re_path,path,include
 from django.conf import settings
 from knox import views as knox_views
 from .views import RegisterAPI,LoginAPI,DeleteAPI,VerifyEmail,ChangePasswordView
@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/comments/',views.CommentApi,name='CommentsList'),
     path('api/user/delete/', DeleteAPI.as_view(),name='DeleteUser'),
     path('api/changepassword/<str:id>/', ChangePasswordView.as_view(), name='ChangePassword'),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     re_path(r'^api/article/([0-9]+)$',views.ArticleById,name='ArticleDetails'),
     re_path(r'^api/article/delete/([0-9]+)$',views.ArticleApi,name='DeleteArticle'),
     re_path(r'^api/sitesurl/delete/([0-9]+)$',views.SiteUrlApi,name='DeleteSitesUrl'),
