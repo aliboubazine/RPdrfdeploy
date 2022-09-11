@@ -70,6 +70,13 @@ class ChangeEmailSerializer(serializers.Serializer):
     password = serializers.CharField(required=True)
     new_email = serializers.CharField(required=True)
 
+# Verify Email Serializer
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=555)
+    class Meta:
+        model = User
+        fields = ['token']    
+
 # Auteur Field
 class AuteurField(serializers.StringRelatedField):
 

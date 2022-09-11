@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
     'django_rest_passwordreset',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'knox',
     'app',
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
     'corsheaders',
+    'drf_yasg',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -115,6 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'U_Id'
+}
 
 LANGUAGE_CODE = 'en-us'
 

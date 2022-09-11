@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view,parser_classes,authentication_classes,permission_classes
-from rest_framework import generics, permissions,status
+from rest_framework import generics, permissions,status,views
 from rest_framework.response import Response
 from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer,ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer,CommentSerializer,ChangeEmailSerializer
+from .serializers import UserSerializer, RegisterSerializer, LoginSerializer,ArticleSerializer,SiteUrlSerializer,ChangePasswordSerializer,CommentSerializer,ChangeEmailSerializer,EmailVerificationSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import Article,User,SiteUrl,Comment
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +10,11 @@ from rest_framework.parsers import JSONParser,MultiPartParser,FormParser
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+import jwt
+from drf_yasg.utils import swagger_auto_schema
+from recommendationplatform import settings
+from drf_yasg import openapi
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # User APIs
 
@@ -22,9 +27,8 @@ class RegisterAPI(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save(request)
         token = AuthToken.objects.create(user)[1]
-        current_site = get_current_site(request).domain
-        relativeLink = reverse('EmailVerify')
-        absurl = 'http://'+current_site+relativeLink+"?token="+token
+        code = RefreshToken.for_user(user).access_token
+        absurl = 'http://127.0.0.1:8080/emailverify/'+str(code)
         email_body = 'Salut '+user.username+'!, veuillez cliquer sur le lien pour activer votre compte \n'+absurl
         data = {'email_body': email_body,'to_email': user.email,'email_subject': 'Activation du compte'}
         Util.send_email(data)
@@ -34,9 +38,26 @@ class RegisterAPI(generics.GenericAPIView):
         })
 
 # Verify Email API
-class VerifyEmail(generics.GenericAPIView):
-    def get(self):
-        pass
+class VerifyEmail(views.APIView):
+    serializer_class = EmailVerificationSerializer
+
+    token_param_config = openapi.Parameter(
+        'token', in_=openapi.IN_QUERY, description='Description', type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[token_param_config])
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY)
+            user = User.objects.get(U_Id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError as identifier:
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as identifier:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 # Login API
 class LoginAPI(generics.GenericAPIView):
